@@ -8,7 +8,7 @@ import { FaEnvelope, FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 const ParticlesBackground = ({ isDarkMode }) => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
-      {[...Array(250)].map(
+      {[...Array(100)].map(
         (
           _,
           index // Change 50 to 100 or more for more particles

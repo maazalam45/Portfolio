@@ -143,7 +143,7 @@ const SocialIcon = ({ href, Icon, label, isDarkMode }) => {
 const ParticlesBackground = ({ isDarkMode }) => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
-      {[...Array(250)].map((_, index) => (
+      {[...Array(50)].map((_, index) => (
         <motion.div
           key={index}
           className={`absolute rounded-full ${
