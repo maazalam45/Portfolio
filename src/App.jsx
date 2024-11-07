@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Components/Navbar";
-import Home from "../Pages/Home";
-import About from "../Pages/About";
-import Projects from "../Pages/Projects";
-import Contact from "../Pages/Contact";
+import Home from "./Pages/Home";
+import About from "./Pages/About";
+import Projects from "./Pages/Projects";
+import Contact from "./Pages/Contact";
 import Footer from "./Components/Footer";
 
 const App = () => {
