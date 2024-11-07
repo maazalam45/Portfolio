@@ -106,8 +106,8 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
             transition={{ duration: 0.3 }}
             className={`md:hidden flex flex-col items-center space-y-4 mt-4 pb-4 ${
               isDarkMode
-                ? "bg-gray-800 bg-opacity-100"
-                : "bg-gray-100 bg-opacity-100"
+                ? "bg-gray-800 bg-opacity-90"
+                : "bg-gray-100 bg-opacity-90"
             }`}
           >
             {navItems.map((item) => (
