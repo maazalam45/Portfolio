@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Components/Navbar";
+
 import Home from "./Pages/Home";
 import About from "./Pages/About";
 import Projects from "./Pages/Projects";
 import Contact from "./Pages/Contact";
 import Footer from "./Components/Footer";
+import Navbar from "./components/Navbar";
+import Loader from "./Components/loader";
 
 const App = () => {
   // Retrieve dark mode preference from localStorage, default to false if not set
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem("darkMode") === "true";
   });
+
+  // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   const toggleDarkMode = () => {
     setIsDarkMode((prevMode) => {
@@ -29,18 +34,49 @@ const App = () => {
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+    // Simulate loading time and check if all content is loaded
+    const timer = setTimeout(() => {
+      window.onload = () => {
+        setIsLoading(false);
+      };
+
+      // Fallback if window.onload doesn't trigger
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+    }, 1500); // Minimum loading time of 1.5 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Prevent scroll while loading
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isLoading]);
+
   return (
     <div className={isDarkMode ? "dark" : ""}>
-      <Navbar
-        toggleDarkMode={toggleDarkMode}
-        isDarkMode={isDarkMode}
-        key="navbar"
-      />
-      <Home isDarkMode={isDarkMode} />
-      <About isDarkMode={isDarkMode} />
-      <Projects isDarkMode={isDarkMode} />
-      <Contact isDarkMode={isDarkMode} />
-      <Footer isDarkMode={isDarkMode} />
+      {isLoading ? (
+        <Loader isDarkMode={isDarkMode} />
+      ) : (
+        <>
+          <Navbar
+            toggleDarkMode={toggleDarkMode}
+            isDarkMode={isDarkMode}
+            key="navbar"
+          />
+          <Home isDarkMode={isDarkMode} />
+          <About isDarkMode={isDarkMode} />
+          <Projects isDarkMode={isDarkMode} />
+          <Contact isDarkMode={isDarkMode} />
+          <Footer isDarkMode={isDarkMode} />
+        </>
+      )}
     </div>
   );
 };
