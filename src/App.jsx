@@ -5,8 +5,9 @@ import About from "./Pages/About";
 import Projects from "./Pages/Projects";
 import Contact from "./Pages/Contact";
 import Footer from "./Components/Footer";
-import Navbar from "./components/Navbar";
+
 import Loader from "./Components/loader";
+import Navbar from "./Components/Navbar";
 
 const App = () => {
   // Retrieve dark mode preference from localStorage, default to false if not set
