@@ -59,19 +59,19 @@ const About = ({ isDarkMode }) => {
       name: "Sindh Madressatul Islam University (SMIU)",
       type: "University",
       icon: FaUserGraduate,
-      years: "2020-Present",
+      years: "2023-Present",
     },
     {
-      name: "Shipowners' Govt. College",
+      name: "Pakistan Shipowners' Govt. College",
       type: "College",
       icon: FaGraduationCap,
-      years: "2018-2020",
+      years: "2021-2023",
     },
     {
       name: "St. Jude's High School",
       type: "School",
       icon: FaGraduationCap,
-      years: "2006-2018",
+      years: "2011-2021",
     },
   ];
 

@@ -58,7 +58,7 @@ const Footer = ({ isDarkMode }) => {
   return (
     <footer
       ref={footerRef}
-      className={`relative overflow-hidden py-16 ${
+      className={`relative overflow-hidden py-16  ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       }`}
     >
@@ -140,8 +140,8 @@ const Footer = ({ isDarkMode }) => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
           >
-            Crafted with <FaHeart className="text-red-500 mx-1" /> and a touch
-            of digital magic
+            Crafted by Muhammad Hasan Alam with{" "}
+            <FaHeart className="text-red-500 mx-1" />
           </motion.p>
         </motion.div>
       </div>

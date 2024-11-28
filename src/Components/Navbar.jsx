@@ -57,7 +57,9 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
                 key={item}
                 href={`#${item.toLowerCase()}`}
                 className={`relative overflow-hidden group ${
-                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                  isDarkMode
+                    ? "text-gray-300 hover:text-purple-400"
+                    : "text-gray-700 hover:text-purple-600"
                 }`}
               >
                 {item}
