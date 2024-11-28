@@ -94,3 +94,4 @@ const Loader = ({ isDarkMode }) => {
 };
 
 export default Loader;
+//new loader
