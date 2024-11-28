@@ -45,7 +45,7 @@ const App = () => {
       // Fallback if window.onload doesn't trigger
       setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 2000);
     }, 1500); // Minimum loading time of 1.5 seconds
 
     return () => clearTimeout(timer);
