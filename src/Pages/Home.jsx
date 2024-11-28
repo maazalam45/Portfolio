@@ -10,18 +10,9 @@ const Home = ({ isDarkMode }) => {
       id="home"
       className={`relative min-h-screen flex flex-col justify-center items-center overflow-hidden ${
         isDarkMode ? "bg-gray-900" : "bg-gray-100"
-      } pt-16 md:pt-20`} // Added top padding to account for the Navbar
+      } pt-16 md:pt-20 px-4 sm:px-6 lg:px-8`}
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center z-0"
-        style={{
-          backgroundImage: isDarkMode
-            ? "url('/placeholder.svg?height=1080&width=1920')"
-            : "url('/placeholder.svg?height=1080&width=1920')",
-          filter: isDarkMode ? "brightness(0.5)" : "brightness(0.7)",
-        }}
-      ></div>
-      <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
+      <div className="relative z-10 max-w-4xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -34,7 +25,7 @@ const Home = ({ isDarkMode }) => {
             className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto mb-4 border-4 border-purple-500 shadow-lg transition-transform duration-300 transform hover:scale-105"
           />
           <h1
-            className={`text-4xl md:text-6xl font-extrabold mb-2 ${
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-2 ${
               isDarkMode ? "text-white" : "text-gray-900"
             }`}
           >
@@ -48,18 +39,19 @@ const Home = ({ isDarkMode }) => {
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
         >
           <p
-            className={`text-lg md:text-xl mb-8 ${
+            className={`text-base sm:text-lg md:text-xl mb-8 ${
               isDarkMode ? "text-gray-300" : "text-gray-700"
             }`}
           >
             I'm a{" "}
             <motion.span
               className="font-semibold text-purple-500 inline-block"
-              animate={{ scale: [1, 1.2, 1] }}
+              animate={{ scale: [1, 1.03, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
               Web & Mobile Developer
-            </motion.span>
+            </motion.span>{" "}
+            passionate about creating innovative solutions.
           </p>
         </motion.div>
         <motion.div
@@ -69,21 +61,15 @@ const Home = ({ isDarkMode }) => {
           className="flex justify-center space-x-6 mb-12"
         >
           <SocialIcon
-            href="https://github.com"
+            href="https://github.com/maazalam45"
             Icon={FaGithub}
             label="GitHub"
             isDarkMode={isDarkMode}
           />
           <SocialIcon
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/in/muhammad-hasan-alam-193046330/"
             Icon={FaLinkedin}
             label="LinkedIn"
-            isDarkMode={isDarkMode}
-          />
-          <SocialIcon
-            href="https://twitter.com"
-            Icon={FaTwitter}
-            label="Twitter"
             isDarkMode={isDarkMode}
           />
         </motion.div>
@@ -91,11 +77,11 @@ const Home = ({ isDarkMode }) => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.6 }}
-          className="space-x-4"
+          className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4"
         >
           <motion.a
-            href="#about"
-            className={`bg-gradient-to-r from-purple-500 to-purple-700 text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-semibold text-sm md:text-lg transition duration-300 ease-in-out inline-block shadow-md hover:shadow-lg`}
+            href="#projects"
+            className={`bg-gradient-to-r from-purple-500 to-purple-700 text-white px-6 py-2 md:px-8 md:py-3 rounded-full font-semibold text-sm md:text-lg transition duration-300 ease-in-out inline-block shadow-md hover:shadow-lg w-full sm:w-auto`}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -103,7 +89,7 @@ const Home = ({ isDarkMode }) => {
           </motion.a>
           <motion.a
             href="#contact"
-            className={`bg-transparent border-2 border-purple-500 px-6 py-2 md:px-8 md:py-3 rounded-full font-semibold text-sm md:text-lg transition duration-300 ease-in-out inline-block shadow-md ${
+            className={`bg-transparent border-2 border-purple-500 px-6 py-2 md:px-8 md:py-3 rounded-full font-semibold text-sm md:text-lg transition duration-300 ease-in-out inline-block shadow-md w-full sm:w-auto ${
               isDarkMode
                 ? "text-purple-400 hover:bg-purple-400 hover:text-gray-900"
                 : "text-purple-500 hover:bg-purple-500 hover:text-white"
@@ -142,7 +128,7 @@ const SocialIcon = ({ href, Icon, label, isDarkMode }) => {
 
 const ParticlesBackground = ({ isDarkMode }) => {
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden">
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
       {[...Array(50)].map((_, index) => (
         <motion.div
           key={index}

@@ -1,25 +1,78 @@
-import React from "react";
-import { motion } from "framer-motion";
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import { motion, useAnimation } from "framer-motion";
 import {
   FaCode,
   FaMobileAlt,
   FaGraduationCap,
   FaLaptopCode,
+  FaUserGraduate,
 } from "react-icons/fa";
 
 const About = ({ isDarkMode }) => {
+  const controls = useAnimation();
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          controls.start("visible");
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [controls]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
+
   const education = [
     {
       name: "Sindh Madressatul Islam University (SMIU)",
       type: "University",
-      icon: FaGraduationCap,
+      icon: FaUserGraduate,
+      years: "2020-Present",
     },
     {
       name: "Shipowners' Govt. College",
       type: "College",
       icon: FaGraduationCap,
+      years: "2018-2020",
     },
-    { name: "St. Jude's High School", type: "School", icon: FaGraduationCap },
+    {
+      name: "St. Jude's High School",
+      type: "School",
+      icon: FaGraduationCap,
+      years: "2006-2018",
+    },
   ];
 
   const skills = [
@@ -29,47 +82,42 @@ const About = ({ isDarkMode }) => {
 
   return (
     <section
+      ref={sectionRef}
       id="about"
-      className={`relative min-h-screen flex flex-col justify-center items-center py-20 ${
+      className={`relative min-h-screen flex flex-col justify-center items-center py-16 sm:py-20 ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       }`}
     >
-      {/* Particle Background */}
       <ParticlesBackground isDarkMode={isDarkMode} />
 
-      <div className="container mx-auto px-4 relative z-10">
+      <motion.div
+        className="container mx-auto px-4 relative z-10"
+        initial="hidden"
+        animate={controls}
+        variants={containerVariants}
+      >
         <motion.h2
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-4xl md:text-5xl font-bold text-center mb-8"
+          variants={itemVariants}
+          className="text-4xl md:text-5xl font-bold text-center mb-12 text-purple-600 dark:text-purple-400"
         >
           About Me
         </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center container">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center container">
+          <motion.div variants={itemVariants} className="flex justify-center">
             <img
               src="https://lh3.googleusercontent.com/a/ACg8ocJmYhrjKWF8EfCZXPdlQZGL0JDgZsmifoKeq0a4WeWhKoMf-B9r=s288-c-no"
               alt="Muhammad Hasan Alam"
-              className="rounded-lg shadow-xl w-full max-w-md mx-auto"
+              className="w-48 h-48 object-cover rounded-lg shadow-xl"
             />
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <p className="text-lg mb-6">
+          <motion.div variants={itemVariants} className="space-y-6">
+            <p className="text-lg">
               Hello! I'm Muhammad Hasan Alam, an aspiring web and mobile
               developer currently studying at Sindh Madressatul Islam University
               (SMIU). I'm passionate about technology and excited to learn and
               grow in the field of software development.
             </p>
-            <p className="text-lg mb-6">
+            <p className="text-lg">
               I'm currently enrolled in a web and mobile development course at
               Saylani Mass IT Training (SMIT), where I'm honing my skills and
               gaining hands-on experience in creating responsive and
@@ -77,90 +125,100 @@ const About = ({ isDarkMode }) => {
               and working towards turning my passion for coding into a
               successful career.
             </p>
-
-            <motion.a
-              href="#contact"
-              className={`inline-block px-6 py-3 rounded-full font-semibold text-lg transition duration-300 ease-in-out ${
-                isDarkMode
-                  ? "bg-purple-600 text-white hover:bg-purple-700"
-                  : "bg-purple-500 text-white hover:bg-purple-600"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Let's Connect
-            </motion.a>
+            <div className="flex justify-center">
+              <motion.a
+                href="#contact"
+                className={`inline-block px-6 py-3 rounded-full font-semibold text-lg transition duration-300 ease-in-out ${
+                  isDarkMode
+                    ? "bg-purple-600 text-white hover:bg-purple-700"
+                    : "bg-purple-500 text-white hover:bg-purple-600"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Let's Connect
+              </motion.a>
+            </div>
           </motion.div>
         </div>
-        {/* Education Section */}
+
         <motion.h3
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-3xl font-bold text-center mt-16 mb-8"
+          variants={itemVariants}
+          className="text-3xl font-bold text-center mt-20 mb-10 text-purple-600 dark:text-purple-400"
         >
-          Education
+          Education Journey
         </motion.h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
+        >
           {education.map((item, index) => (
             <motion.div
               key={item.name}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+              variants={itemVariants}
               className={`p-6 rounded-lg shadow-lg ${
                 isDarkMode ? "bg-gray-800" : "bg-white"
-              } flex flex-col items-center justify-center`}
+              } flex flex-col items-center justify-center transform transition-all duration-300 hover:scale-105`}
             >
-              <item.icon className="text-4xl text-purple-500 mb-4" />
+              <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                <item.icon className="text-3xl text-purple-500" />
+              </div>
               <h4 className="text-xl font-semibold text-center mb-2">
                 {item.name}
               </h4>
-              <p className="text-center text-gray-500">{item.type}</p>
+              <p className="text-center text-purple-500 dark:text-purple-400">
+                {item.type}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                {item.years}
+              </p>
             </motion.div>
           ))}
-        </div>
-        {/* Skills Section */}
+        </motion.div>
+
         <motion.h3
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.1 }}
-          className="text-3xl font-bold text-center mb-8"
+          variants={itemVariants}
+          className="text-3xl font-bold text-center mb-10 text-purple-600 dark:text-purple-400"
         >
           Skills In Progress
         </motion.h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-20"
+        >
           {skills.map((skill, index) => (
             <motion.div
               key={skill.name}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.3 + index * 0.1 }}
+              variants={itemVariants}
               className={`p-6 rounded-lg shadow-lg ${
                 isDarkMode ? "bg-gray-800" : "bg-white"
-              } flex flex-col items-center justify-center`}
+              } flex flex-col items-center justify-center transform transition-all duration-300 hover:scale-105`}
             >
-              <skill.icon className={`text-4xl ${skill.color} mb-4`} />
+              <div
+                className={`w-16 h-16 rounded-full bg-${
+                  skill.color.split("-")[1]
+                }-100 flex items-center justify-center mb-4`}
+              >
+                <skill.icon className={`text-3xl ${skill.color}`} />
+              </div>
               <h4 className="text-xl font-semibold text-center">
                 {skill.name}
               </h4>
             </motion.div>
           ))}
-        </div>
-        {/* Current Learning Section */}
+        </motion.div>
+
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.5 }}
-          className="mt-16 text-center"
+          variants={itemVariants}
+          className="mt-16 text-center bg-gradient-to-r bg-white  dark:bg-gray-800  p-8 rounded-lg shadow-xl"
         >
-          <FaLaptopCode className="text-6xl text-purple-500 mx-auto mb-4" />
-          <p className="text-lg">
+          <FaLaptopCode className="text-6xl text-purple-600 mx-auto mb-4" />
+          <p className="text-lg text-black dark:text-white font-semibold">
             Currently enhancing my skills at Saylani Mass IT Training (SMIT) in
             Web and Mobile Development
           </p>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

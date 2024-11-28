@@ -31,7 +31,11 @@ const App = () => {
 
   return (
     <div className={isDarkMode ? "dark" : ""}>
-      <Navbar toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
+      <Navbar
+        toggleDarkMode={toggleDarkMode}
+        isDarkMode={isDarkMode}
+        key="navbar"
+      />
       <Home isDarkMode={isDarkMode} />
       <About isDarkMode={isDarkMode} />
       <Projects isDarkMode={isDarkMode} />

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+"use client";
+
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import {
   FaGithub,
   FaExternalLinkAlt,
@@ -39,6 +41,29 @@ const ParticlesBackground = ({ isDarkMode }) => {
 
 const Projects = ({ isDarkMode }) => {
   const [showAll, setShowAll] = useState(false);
+  const controls = useAnimation();
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          controls.start("visible");
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [controls]);
 
   const projects = [
     {
@@ -50,6 +75,16 @@ const Projects = ({ isDarkMode }) => {
       github: "https://github.com/maazalam45/Shopping-Mania-Hasan",
       live: "https://shopping-mania-hasan.vercel.app/",
       tags: ["React", "Tailwind CSS", "JavaScript", "Firebase-Auth"],
+    },
+    {
+      title: "My Portfolio",
+      description:
+        "A responsive and visually appealing portfolio website designed to showcase my projects, skills, and experience. Built with React and Tailwind CSS, this portfolio features smooth animations, easy navigationt, and theme changing feature,. It's a one-stop platform to explore my work, learn about my expertise, and connect with me.",
+      image:
+        "https://plus.unsplash.com/premium_photo-1681487927178-ebfd0888a940?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTd8fGJhZyUyMGFuaW1hdGVkfGVufDB8fDB8fHww",
+      github: "https://github.com/maazalam45/Portfolio",
+      live: "https://my-portfolio1-ten-tau.vercel.app/",
+      tags: ["React", "Tailwind CSS", "JavaScript", "Responsive Design"],
     },
     {
       title: "Weather Web",
@@ -66,7 +101,7 @@ const Projects = ({ isDarkMode }) => {
       description:
         "My Client portfolio website showcasing my projects and skills. Features smooth animations, responsive design.",
       image:
-        "https://media.istockphoto.com/id/1729511720/photo/3d-black-briefcase-with-golden-lock-floating-isolated-on-blue-background-office-work-job.webp?a=1&b=1&s=612x612&w=0&k=20&c=vsG841v5kCXbVWCtDwWnnUK2SyS7YpT_qRLFAuqu6SE=",
+        "https://images.unsplash.com/photo-1483546416237-76fd26bbcdd1?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHdyaXRpbmclMjBhbmltYXRpb258ZW58MHx8MHx8fDA%3D",
       github: "https://github.com/maazalam45/Hasan-Client-Portfolio",
       live: "https://hasan-client-portfolio.vercel.app/",
       tags: ["React", "Tailwind CSS"],
@@ -111,32 +146,55 @@ const Projects = ({ isDarkMode }) => {
 
   const visibleProjects = showAll ? projects : projects.slice(0, 4);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 },
+    },
+  };
+
   return (
     <section
+      ref={sectionRef}
       id="projects"
       className={`min-h-screen py-20 relative ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       }`}
     >
       <ParticlesBackground isDarkMode={isDarkMode} />
-      <div className="container mx-auto px-4 relative z-10">
+      <motion.div
+        className="container mx-auto px-4 relative z-10"
+        initial="hidden"
+        animate={controls}
+        variants={containerVariants}
+      >
         <motion.h2
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-4xl md:text-5xl font-bold text-center mb-16"
+          variants={itemVariants}
+          className="text-4xl md:text-5xl font-bold text-center mb-16 text-purple-600 dark:text-purple-400"
         >
           My Projects
         </motion.h2>
-        <div className="space-y-24">
-          <AnimatePresence>
+        <AnimatePresence>
+          <motion.div className="space-y-24">
             {visibleProjects.map((project, index) => (
               <motion.div
                 key={project.title}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -50 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
                 className={`flex flex-col lg:flex-row items-center gap-8 ${
                   index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
                 }`}
@@ -148,48 +206,63 @@ const Projects = ({ isDarkMode }) => {
                       alt={project.title}
                       className="w-full h-auto rounded-xl shadow-lg transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex items-center justify-center lg:flex hidden">
                       <div className="flex space-x-4">
                         <a
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-white text-gray-900 px-4 py-2 rounded-full font-semibold hover:bg-gray-200 transition-colors duration-300"
+                          className="bg-white text-gray-900 px-4 py-2 rounded-full font-semibold hover:bg-gray-200 transition-colors duration-300 flex items-center"
                         >
-                          <FaGithub className="inline-block mr-2" />
+                          <FaGithub className="mr-2" />
                           GitHub
                         </a>
                         <a
                           href={project.live}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition-colors duration-300"
+                          className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition-colors duration-300 flex items-center"
                         >
-                          <FaExternalLinkAlt className="inline-block mr-2" />
+                          <FaExternalLinkAlt className="mr-2" />
                           Live Demo
                         </a>
                       </div>
                     </div>
                   </div>
+                  {/* Buttons for mobile and tablet screens */}
+                  <div className="mt-4 flex justify-center space-x-4 lg:hidden">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-white text-gray-900 px-4 py-2 rounded-full font-semibold hover:bg-gray-200 transition-colors duration-300"
+                    >
+                      <FaGithub className="inline-block mr-2" />
+                      GitHub
+                    </a>
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-purple-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-purple-700 transition-colors duration-300"
+                    >
+                      <FaExternalLinkAlt className="inline-block mr-2" />
+                      Live Demo
+                    </a>
+                  </div>
                 </div>
                 <div className="w-full lg:w-3/5">
-                  <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
-                  <p
-                    className={`mb-6 ${
-                      isDarkMode ? "text-gray-300" : "text-gray-600"
-                    }`}
-                  >
+                  <h3 className="text-3xl font-bold mb-4 text-purple-600 dark:text-purple-400">
+                    {project.title}
+                  </h3>
+                  <p className="mb-6 text-gray-700 dark:text-gray-300">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                          isDarkMode
-                            ? "bg-purple-700 text-purple-100"
-                            : "bg-purple-100 text-purple-700"
-                        }`}
+                        className="px-3 py-1 text-sm font-semibold rounded-full bg-purple-100 text-purple-700 dark:bg-purple-700 dark:text-purple-100"
                       >
                         {tag}
                       </span>
@@ -198,61 +271,39 @@ const Projects = ({ isDarkMode }) => {
                 </div>
               </motion.div>
             ))}
-          </AnimatePresence>
-        </div>
+          </motion.div>
+        </AnimatePresence>
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
+          variants={itemVariants}
           className="flex flex-col items-center mt-16 space-y-8"
         >
-          {!showAll && projects.length > 4 ? (
+          {projects.length > 4 && (
             <button
-              onClick={() => setShowAll(true)}
-              className={`flex items-center px-6 py-3 rounded-full font-semibold text-lg transition-colors duration-300 ${
-                isDarkMode
-                  ? "bg-purple-600 text-white hover:bg-purple-700"
-                  : "bg-purple-100 text-purple-700 hover:bg-purple-200"
-              }`}
+              onClick={() => setShowAll(!showAll)}
+              className="flex items-center px-6 py-3 rounded-full font-semibold text-lg transition-colors duration-300 bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600"
             >
-              See All
-              <FaChevronDown className="ml-2" />
+              {showAll ? "Show Less" : "See All"}
+              {showAll ? (
+                <FaChevronUp className="ml-2" />
+              ) : (
+                <FaChevronDown className="ml-2" />
+              )}
             </button>
-          ) : showAll ? (
-            <button
-              onClick={() => setShowAll(false)}
-              className={`flex items-center px-6 py-3 rounded-full font-semibold text-lg transition-colors duration-300 ${
-                isDarkMode
-                  ? "bg-purple-600 text-white hover:bg-purple-700"
-                  : "bg-purple-100 text-purple-700 hover:bg-purple-200"
-              }`}
-            >
-              Close
-              <FaChevronUp className="ml-2" />
-            </button>
-          ) : null}
-          <p
-            className={`text-center ${
-              isDarkMode ? "text-gray-300" : "text-gray-600"
-            }`}
-          >
+          )}
+          <p className="text-center text-gray-700 dark:text-gray-300">
             To see more of my projects, visit my{" "}
             <a
               href="https://github.com/maazalam45"
               target="_blank"
               rel="noopener noreferrer"
-              className={`font-semibold ${
-                isDarkMode
-                  ? "text-purple-400 hover:text-purple-300"
-                  : "text-purple-600 hover:text-purple-700"
-              }`}
+              className="font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
             >
               GitHub profile
             </a>
             .
           </p>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };
