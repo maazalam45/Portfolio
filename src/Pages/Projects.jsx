@@ -282,7 +282,7 @@ const Projects = ({ isDarkMode }) => {
               onClick={() => setShowAll(!showAll)}
               className="flex items-center px-6 py-3 rounded-full font-semibold text-lg transition-colors duration-300 bg-purple-600 text-white hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600"
             >
-              {showAll ? "Show Less" : "See All"}
+              {showAll ? "Show Less" : "See More"}
               {showAll ? (
                 <FaChevronUp className="ml-2" />
               ) : (

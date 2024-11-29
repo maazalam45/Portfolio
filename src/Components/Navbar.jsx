@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaMoon, FaSun, FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = ({ toggleDarkMode, isDarkMode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef(null);
 
   const handleToggle = () => setIsOpen(!isOpen);
 
@@ -22,9 +23,21 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
       }
     };
 
+    const handleClickOutside = (event) => {
+      if (
+        navRef.current &&
+        !navRef.current.contains(event.target) &&
+        window.innerWidth < 768
+      ) {
+        setIsOpen(false);
+      }
+    };
+
     document.addEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [scrolled]);
 
@@ -32,6 +45,7 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
 
   return (
     <nav
+      ref={navRef}
       className={`fixed top-0 left-0 w-full shadow-md z-20 transition-all duration-300 ${
         isDarkMode
           ? scrolled
@@ -147,4 +161,3 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
 };
 
 export default Navbar;
-//new nav

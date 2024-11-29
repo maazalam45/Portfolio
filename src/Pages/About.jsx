@@ -84,7 +84,7 @@ const About = ({ isDarkMode }) => {
     <section
       ref={sectionRef}
       id="about"
-      className={`relative min-h-screen flex flex-col justify-center items-center py-16 sm:py-20 ${
+      className={`relative min-h-screen py-16 sm:py-20 ${
         isDarkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"
       }`}
     >
@@ -102,22 +102,37 @@ const About = ({ isDarkMode }) => {
         >
           About Me
         </motion.h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center container">
-          <motion.div variants={itemVariants} className="flex justify-center">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-8 lg:space-y-0 lg:space-x-12">
+          <motion.div
+            variants={itemVariants}
+            className="lg:w-1/3 flex flex-col items-center"
+          >
             <img
               src="https://lh3.googleusercontent.com/a/ACg8ocJmYhrjKWF8EfCZXPdlQZGL0JDgZsmifoKeq0a4WeWhKoMf-B9r=s288-c-no"
               alt="Muhammad Hasan Alam"
-              className="w-48 h-48 object-cover rounded-lg shadow-xl"
+              className="w-48 h-48 object-cover rounded-full shadow-xl mb-6"
             />
+            <motion.a
+              href="#contact"
+              className={`inline-block px-6 py-3 rounded-full font-semibold text-lg transition duration-300 ease-in-out ${
+                isDarkMode
+                  ? "bg-purple-600 text-white hover:bg-purple-700"
+                  : "bg-purple-500 text-white hover:bg-purple-600"
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Let's Connect
+            </motion.a>
           </motion.div>
-          <motion.div variants={itemVariants} className="space-y-6">
-            <p className="text-lg">
+          <motion.div variants={itemVariants} className="lg:w-2/3 space-y-6">
+            <p className="text-lg leading-relaxed">
               Hello! I'm Muhammad Hasan Alam, an aspiring web and mobile
               developer currently studying at Sindh Madressatul Islam University
               (SMIU). I'm passionate about technology and excited to learn and
               grow in the field of software development.
             </p>
-            <p className="text-lg">
+            <p className="text-lg leading-relaxed">
               I'm currently enrolled in a web and mobile development course at
               Saylani Mass IT Training (SMIT), where I'm honing my skills and
               gaining hands-on experience in creating responsive and
@@ -125,20 +140,6 @@ const About = ({ isDarkMode }) => {
               and working towards turning my passion for coding into a
               successful career.
             </p>
-            <div className="flex justify-center">
-              <motion.a
-                href="#contact"
-                className={`inline-block px-6 py-3 rounded-full font-semibold text-lg transition duration-300 ease-in-out ${
-                  isDarkMode
-                    ? "bg-purple-600 text-white hover:bg-purple-700"
-                    : "bg-purple-500 text-white hover:bg-purple-600"
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Let's Connect
-              </motion.a>
-            </div>
           </motion.div>
         </div>
 
@@ -150,7 +151,7 @@ const About = ({ isDarkMode }) => {
         </motion.h3>
         <motion.div
           variants={containerVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
         >
           {education.map((item, index) => (
             <motion.div

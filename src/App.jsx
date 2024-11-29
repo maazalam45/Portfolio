@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import Home from "./Pages/Home";
 import About from "./Pages/About";
@@ -8,26 +9,28 @@ import Footer from "./Components/Footer";
 
 import Loader from "./Components/loader";
 import Navbar from "./Components/Navbar";
+import ThemeTransitionLoader from "./Components/ThemeTransitionLoader";
 
 const App = () => {
-  // Retrieve dark mode preference from localStorage, default to false if not set
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem("darkMode") === "true";
   });
-
-  // Add loading state
   const [isLoading, setIsLoading] = useState(true);
+  const [isThemeTransitioning, setIsThemeTransitioning] = useState(false);
 
   const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => {
-      const newMode = !prevMode;
-      localStorage.setItem("darkMode", newMode); // Save the new preference
-      return newMode;
-    });
+    setIsThemeTransitioning(true);
+    setTimeout(() => {
+      setIsDarkMode((prevMode) => {
+        const newMode = !prevMode;
+        localStorage.setItem("darkMode", newMode);
+        return newMode;
+      });
+    }, 750); // Delay theme change to middle of transition
+    setTimeout(() => setIsThemeTransitioning(false), 1500); // Total transition time
   };
 
   useEffect(() => {
-    // Apply initial dark mode class based on saved preference
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
@@ -36,51 +39,73 @@ const App = () => {
   }, [isDarkMode]);
 
   useEffect(() => {
-    // Simulate loading time and check if all content is loaded
     const timer = setTimeout(() => {
       window.onload = () => {
         setIsLoading(false);
       };
 
-      // Fallback if window.onload doesn't trigger
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
-    }, 1500); // Minimum loading time of 1.5 seconds
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Prevent scroll while loading
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || isThemeTransitioning) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [isLoading]);
+  }, [isLoading, isThemeTransitioning]);
 
   return (
     <div className={isDarkMode ? "dark" : ""}>
-      {isLoading ? (
-        <Loader isDarkMode={isDarkMode} />
-      ) : (
-        <>
-          <Navbar
-            toggleDarkMode={toggleDarkMode}
-            isDarkMode={isDarkMode}
-            key="navbar"
-          />
-          <Home isDarkMode={isDarkMode} />
-          <About isDarkMode={isDarkMode} />
-          <Projects isDarkMode={isDarkMode} />
-          <Contact isDarkMode={isDarkMode} />
-          <Footer isDarkMode={isDarkMode} />
-        </>
-      )}
+      <AnimatePresence>
+        {isLoading ? (
+          <motion.div
+            key="initial-loader"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Loader isDarkMode={isDarkMode} />
+          </motion.div>
+        ) : isThemeTransitioning ? (
+          <motion.div
+            key="theme-transition-loader"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ThemeTransitionLoader
+              isDarkMode={isDarkMode}
+              isTransitioning={isThemeTransitioning}
+            />
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoading || isThemeTransitioning ? 0 : 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Navbar
+          toggleDarkMode={toggleDarkMode}
+          isDarkMode={isDarkMode}
+          key="navbar"
+        />
+        <Home isDarkMode={isDarkMode} />
+        <About isDarkMode={isDarkMode} />
+        <Projects isDarkMode={isDarkMode} />
+        <Contact isDarkMode={isDarkMode} />
+        <Footer isDarkMode={isDarkMode} />
+      </motion.div>
     </div>
   );
 };
 
 export default App;
-//updated

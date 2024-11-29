@@ -135,13 +135,21 @@ const Footer = ({ isDarkMode }) => {
             © {year} Muhammad Hasan Alam. All rights reserved.
           </p>
           <motion.p
-            className="text-sm flex items-center justify-center"
+            className="text-sm flex items-center justify-center gap-1"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
           >
-            Crafted by Muhammad Hasan Alam with{" "}
-            <FaHeart className="text-red-500 mx-1" />
+            Crafted by{" "}
+            <motion.a
+              href="https://www.linkedin.com/in/muhammad-hasan-alam-193046330/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400"
+            >
+              Muhammad Hasan Alam
+            </motion.a>
+            with <FaHeart className="text-red-500 mx-1" />
           </motion.p>
         </motion.div>
       </div>
