@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import {
   FaEnvelope,
   FaGithub,
   FaLinkedin,
-  FaFileDownload, // Changed to FaFileDownload from react-icons
+  FaFileDownload,
+  FaSpinner,
 } from "react-icons/fa";
 
 // ParticlesBackground component
@@ -43,6 +44,7 @@ const ParticlesBackground = ({ isDarkMode }) => {
 const Contact = ({ isDarkMode }) => {
   const controls = useAnimation();
   const sectionRef = useRef(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -87,22 +89,22 @@ const Contact = ({ isDarkMode }) => {
     },
   };
 
-  const handleDownload = async () => {
-    try {
-      // Convert Google Drive view link to download link
-      const fileId = "13y07IY0tPfwSrSmIU2l3a4TUBoipCMGD";
-      const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+  const handleDownload = () => {
+    //original link of Drive:
+    //https://drive.google.com/file/d/1WsrND4BoNjlCGS3H1WatkhCR9GJgzWYV/view?usp=drive_link
+    https: setIsDownloading(true);
+    const fileId = "1WsrND4BoNjlCGS3H1WatkhCR9GJgzWYV";
+    const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
 
-      // Create a link element
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = "HasanAlam-CV.pdf"; // Name for the downloaded file
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("Failed to download CV:", error);
-    }
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+    iframe.src = downloadUrl;
+
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+      setIsDownloading(false);
+    }, 5000);
   };
 
   const contactItems = [
@@ -120,11 +122,6 @@ const Contact = ({ isDarkMode }) => {
       icon: FaLinkedin,
       text: "linkedin.com/in/muhammad-hasan-alam",
       href: "https://www.linkedin.com/in/muhammad-hasan-alam-193046330/",
-    },
-    {
-      icon: FaFileDownload,
-      text: "Download CV",
-      action: handleDownload,
     },
   ];
 
@@ -170,35 +167,40 @@ const Contact = ({ isDarkMode }) => {
                   key={index}
                   variants={itemVariants}
                   className="flex items-center group hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg transition-colors cursor-pointer"
-                  onClick={item.action}
                   whileHover={{ x: 5 }}
                 >
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center w-full"
-                    >
-                      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-purple-100 dark:bg-purple-900 rounded-full mr-4">
-                        <item.icon className="text-purple-500 text-xl group-hover:text-purple-600 transition-colors" />
-                      </div>
-                      <span className="text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors text-sm sm:text-base truncate flex-grow">
-                        {item.text}
-                      </span>
-                    </a>
-                  ) : (
-                    <>
-                      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-purple-100 dark:bg-purple-900 rounded-full mr-4">
-                        <item.icon className="text-purple-500 text-xl group-hover:text-purple-600 transition-colors" />
-                      </div>
-                      <span className="text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors text-sm sm:text-base truncate flex-grow">
-                        {item.text}
-                      </span>
-                    </>
-                  )}
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center w-full"
+                  >
+                    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-purple-100 dark:bg-purple-900 rounded-full mr-4">
+                      <item.icon className="text-purple-500 text-xl group-hover:text-purple-600 transition-colors" />
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors text-sm sm:text-base truncate flex-grow">
+                      {item.text}
+                    </span>
+                  </a>
                 </motion.div>
               ))}
+              <motion.div
+                variants={itemVariants}
+                className="flex items-center group hover:bg-gray-100 dark:hover:bg-gray-700 p-2 rounded-lg transition-colors cursor-pointer"
+                onClick={handleDownload}
+                whileHover={{ x: 5 }}
+              >
+                <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-purple-100 dark:bg-purple-900 rounded-full mr-4">
+                  {isDownloading ? (
+                    <FaSpinner className="text-purple-500 text-xl animate-spin" />
+                  ) : (
+                    <FaFileDownload className="text-purple-500 text-xl group-hover:text-purple-600 transition-colors" />
+                  )}
+                </div>
+                <span className="text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors text-sm sm:text-base truncate flex-grow">
+                  {isDownloading ? "Just a moment..." : "Download CV"}
+                </span>
+              </motion.div>
             </div>
           </motion.div>
         </div>
