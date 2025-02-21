@@ -1,46 +1,57 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { FaSun, FaMoon } from "react-icons/fa";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ThemeTransitionLoader = ({ isDarkMode, isTransitioning }) => {
+  const [buttonPosition, setButtonPosition] = useState({ x: "100%", y: "0%" });
+  const [transitionColor, setTransitionColor] = useState(null);
+
+  useEffect(() => {
+    const button = document.getElementById("theme-toggle-btn");
+    if (button) {
+      const rect = button.getBoundingClientRect();
+      setButtonPosition({
+        x: `${rect.left + rect.width / 2}px`,
+        y: `${rect.top + rect.height / 2}px`,
+      });
+    }
+
+    // Set transition color only when the transition starts
+    if (isTransitioning) {
+      setTransitionColor(isDarkMode ? "#e8e8e8" : "#000000");
+    }
+  }, [isTransitioning]);
+
   return (
-    <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      initial={{ opacity: 0 }}
-      animate={{
-        opacity: isTransitioning ? 1 : 0,
-        backgroundColor: isDarkMode ? "#1a202c" : "#f7fafc",
-      }}
-      transition={{
-        opacity: { duration: 0.3 },
-        backgroundColor: { duration: 0.5 },
-      }}
-    >
-      <div className="text-center flex flex-col items-center justify-center">
+    <AnimatePresence>
+      {isTransitioning && transitionColor && (
         <motion.div
-          className="text-6xl mb-4 flex items-center justify-center"
+          className="fixed inset-0 z-50 pointer-events-none"
+          initial={{
+            clipPath: `circle(5% at ${buttonPosition.x} ${buttonPosition.y})`,
+            opacity: 1, // No fade-in effect
+          }}
           animate={{
-            color: isDarkMode ? "#ffffff" : "#000000",
+            clipPath: `circle(150% at ${buttonPosition.x} ${buttonPosition.y})`,
+            opacity: 1, // Stay fully visible throughout
           }}
-          transition={{
-            duration: 0.5,
-            delay: isDarkMode ? 0 : 0.3, // Delay color change for light mode
+          exit={{
+            clipPath: `circle(150% at ${buttonPosition.x} ${buttonPosition.y})`,
+            opacity: 1, // Prevents fade-out
           }}
-        >
-          {isDarkMode ? <FaMoon size={64} /> : <FaSun size={64} />}
-        </motion.div>
-        <motion.div
-          className={`text-2xl font-bold ${
-            isDarkMode ? "text-white" : "text-gray-900"
-          }`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {isDarkMode ? "Switching to Dark Theme" : "Switching to Light Theme"}
-        </motion.div>
-      </div>
-    </motion.div>
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          style={{
+            backgroundColor: transitionColor,
+            position: "fixed",
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+          }}
+        />
+      )}
+    </AnimatePresence>
   );
 };
 
