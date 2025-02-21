@@ -1,14 +1,25 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
 import {
-  FaCode,
-  FaMobileAlt,
   FaGraduationCap,
   FaLaptopCode,
   FaUserGraduate,
+  FaJava,
 } from "react-icons/fa";
+import {
+  SiHtml5,
+  SiCss3,
+  SiJavascript,
+  SiReact,
+  SiNodedotjs,
+  SiMongodb,
+  SiMysql,
+  SiMui,
+  SiAntdesign,
+  SiShadcnui,
+} from "react-icons/si";
 
 const About = ({ isDarkMode }) => {
   const controls = useAnimation();
@@ -73,11 +84,26 @@ const About = ({ isDarkMode }) => {
       icon: FaGraduationCap,
       years: "2011-2021",
     },
+    {
+      name: "Saylani Mass IT Training (SMIT)",
+      type: "Course",
+      icon: FaLaptopCode,
+      years: "2023-2025",
+    },
   ];
 
   const skills = [
-    { name: "Web Development", icon: FaCode, color: "text-blue-500" },
-    { name: "Mobile Development", icon: FaMobileAlt, color: "text-green-500" },
+    { name: "HTML", icon: SiHtml5, color: "text-orange-500" },
+    { name: "CSS", icon: SiCss3, color: "text-blue-500" },
+    { name: "JavaScript", icon: SiJavascript, color: "text-yellow-500" },
+    { name: "Java", icon: FaJava, color: "text-red-500" },
+    { name: "React", icon: SiReact, color: "text-blue-400" },
+    { name: "Node.js", icon: SiNodedotjs, color: "text-green-500" },
+    { name: "MongoDB", icon: SiMongodb, color: "text-green-600" },
+    { name: "MySQL", icon: SiMysql, color: "text-blue-600" },
+    { name: "Shadcn UI", icon: SiShadcnui, color: "text-gray-800" },
+    { name: "Material UI", icon: SiMui, color: "text-blue-700" },
+    { name: "Ant Design", icon: SiAntdesign, color: "text-red-600" },
   ];
 
   return (
@@ -98,7 +124,7 @@ const About = ({ isDarkMode }) => {
       >
         <motion.h2
           variants={itemVariants}
-          className="text-4xl md:text-5xl font-bold text-center mb-12 text-purple-600 dark:text-purple-400"
+          className="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200"
         >
           About Me
         </motion.h2>
@@ -112,13 +138,10 @@ const About = ({ isDarkMode }) => {
               alt="Muhammad Hasan Alam"
               className="w-48 h-48 object-cover rounded-full shadow-xl mb-6"
             />
+
             <motion.a
               href="#contact"
-              className={`inline-block px-6 py-3 rounded-full font-semibold text-lg transition duration-300 ease-in-out ${
-                isDarkMode
-                  ? "bg-purple-600 text-white hover:bg-purple-700"
-                  : "bg-purple-500 text-white hover:bg-purple-600"
-              }`}
+              className="inline-block px-6 py-3 rounded-full font-semibold text-lg transition duration-300 ease-in-out bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-blue-600 hover:to-purple-700"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -145,33 +168,55 @@ const About = ({ isDarkMode }) => {
 
         <motion.h3
           variants={itemVariants}
-          className="text-3xl font-bold text-center mt-20 mb-10 text-purple-600 dark:text-purple-400"
+          className="text-3xl font-bold text-center mt-20 mb-10 text-gray-800 dark:text-gray-200"
         >
           Education Journey
         </motion.h3>
         <motion.div
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20"
         >
           {education.map((item, index) => (
             <motion.div
               key={item.name}
               variants={itemVariants}
-              className={`p-6 rounded-lg shadow-lg ${
+              className={`p-6 rounded-lg ${
                 isDarkMode ? "bg-gray-800" : "bg-white"
-              } flex flex-col items-center justify-center transform transition-all duration-300 hover:scale-105`}
+              } flex flex-col items-center justify-between h-full transition-all duration-300 hover:shadow-lg relative overflow-hidden group`}
+              style={{
+                boxShadow: isDarkMode
+                  ? "0 4px 6px -1px rgba(255, 255, 255, 0.1)"
+                  : "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+              }}
             >
-              <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mb-4">
-                <item.icon className="text-3xl text-purple-500" />
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+              <div
+                className={`w-16 h-16 rounded-full ${
+                  isDarkMode ? "bg-gray-700" : "bg-gray-200"
+                } flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+              >
+                <item.icon
+                  className={`text-3xl ${
+                    isDarkMode ? "text-blue-400" : "text-purple-600"
+                  }`}
+                />
               </div>
               <h4 className="text-xl font-semibold text-center mb-2">
-                {item.name}
-              </h4>
-              <p className="text-center text-purple-500 dark:text-purple-400">
                 {item.type}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+              </h4>
+              <p
+                className={`text-sm ${
+                  isDarkMode ? "text-gray-400" : "text-gray-600"
+                } mb-4`}
+              >
                 {item.years}
+              </p>
+              <p
+                className={`text-base ${
+                  isDarkMode ? "text-gray-300" : "text-gray-700"
+                } text-center`}
+              >
+                {item.name}
               </p>
             </motion.div>
           ))}
@@ -179,45 +224,40 @@ const About = ({ isDarkMode }) => {
 
         <motion.h3
           variants={itemVariants}
-          className="text-3xl font-bold text-center mb-10 text-purple-600 dark:text-purple-400"
+          className="text-3xl font-bold text-center mb-10 text-gray-800 dark:text-gray-200"
         >
           Skills In Progress
         </motion.h3>
         <motion.div
           variants={containerVariants}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-20"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-20"
         >
           {skills.map((skill, index) => (
             <motion.div
               key={skill.name}
               variants={itemVariants}
-              className={`p-6 rounded-lg shadow-lg ${
+              className={`p-4 rounded-lg ${
                 isDarkMode ? "bg-gray-800" : "bg-white"
-              } flex flex-col items-center justify-center transform transition-all duration-300 hover:scale-105`}
+              } flex flex-col items-center justify-center transition-all duration-300 hover:shadow-md group relative overflow-hidden`}
+              style={{
+                boxShadow: isDarkMode
+                  ? "0 2px 4px -1px rgba(255, 255, 255, 0.1)"
+                  : "0 2px 4px -1px rgba(0, 0, 0, 0.1)",
+              }}
             >
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
               <div
-                className={`w-16 h-16 rounded-full bg-${
-                  skill.color.split("-")[1]
-                }-100 flex items-center justify-center mb-4`}
+                className={`w-16 h-16 rounded-full ${
+                  isDarkMode ? "bg-gray-700" : "bg-gray-200"
+                } flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}
               >
                 <skill.icon className={`text-3xl ${skill.color}`} />
               </div>
-              <h4 className="text-xl font-semibold text-center">
+              <h4 className="text-sm font-semibold text-center group-hover:scale-105 transition-transform duration-300">
                 {skill.name}
               </h4>
             </motion.div>
           ))}
-        </motion.div>
-
-        <motion.div
-          variants={itemVariants}
-          className="mt-16 text-center bg-gradient-to-r bg-white  dark:bg-gray-800  p-8 rounded-lg shadow-xl"
-        >
-          <FaLaptopCode className="text-6xl text-purple-600 mx-auto mb-4" />
-          <p className="text-lg text-black dark:text-white font-semibold">
-            Currently enhancing my skills at Saylani Mass IT Training (SMIT) in
-            Web and Mobile Development
-          </p>
         </motion.div>
       </motion.div>
     </section>
@@ -245,7 +285,7 @@ const ParticlesBackground = ({ isDarkMode }) => {
           }}
           transition={{
             duration: Math.random() * 5 + 5,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             ease: "easeInOut",
           }}
         ></motion.div>
